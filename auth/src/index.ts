@@ -1,5 +1,6 @@
 import express from 'express'
 import 'express-async-errors'
+import mongoose from 'mongoose';
 //import {json} from 'body-parser'
 import { currentUserRouter } from './router/current-user';
 import { signInRouter } from './router/signin';
@@ -21,6 +22,16 @@ app.all("*", async()=>{
 })
 app.use(errorHandler)
 
+const startDB = async()=>{
+    try {
+        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth')
+        console.log("Connecting to Mongo...")
+    } catch (error) {
+        console.error(error)
+    }
+}
 app.listen(3003,()=>{
     console.log('Listening to port 3003!!!')
 })
+
+startDB()

@@ -3,7 +3,7 @@ import {body,validationResult} from 'express-validator'
 import { RequestValidationError } from '../error/request-validation-error'
 import { BadRequestError } from '../error/bad-request-error'
 import { User } from '../model/user-model'
-
+import jwt from 'jsonwebtoken'
 const router = express.Router()
 
 router.post('/api/users/signup',[
@@ -26,6 +26,13 @@ router.post('/api/users/signup',[
     const user = User.build({email,password})
     await user.save();
     console.log("User created.")
+    //Generating JWT
+   const token =  jwt.sign({id: user.id, email: user.email},'abcd')
+
+    //store in a cookie
+    req.session = {
+        token
+    }
     res.status(201).send(user)
 })
 export {router as signupRouter}

@@ -8,10 +8,17 @@ import { signOutRouter } from './router/signout';
 import { signupRouter } from './router/signup';
 import { errorHandler } from './middleware/error-handler';
 import { notFoundError } from './error/not-found-error';
+import cookieSession from 'cookie-session'
 const app = express();
+app.set('trust proxy',true)
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
+app.use(
+    cookieSession({
+        signed: false,
+        secure: true
+    })
+)
 app.use(currentUserRouter)
 app.use(signInRouter)
 app.use(signOutRouter)

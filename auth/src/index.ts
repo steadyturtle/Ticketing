@@ -1,44 +1,18 @@
-import express from 'express'
-import 'express-async-errors'
-import mongoose from 'mongoose';
-//import {json} from 'body-parser'
-import { currentUserRouter } from './router/current-user';
-import { signInRouter } from './router/signin';
-import { signOutRouter } from './router/signout';
-import { signupRouter } from './router/signup';
-import { errorHandler } from './middleware/error-handler';
-import { notFoundError } from './error/not-found-error';
-import cookieSession from 'cookie-session'
-const app = express();
-app.set('trust proxy',true)
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-app.use(
-    cookieSession({
-        signed: false,
-        secure: true
-    })
-)
-app.use(currentUserRouter)
-app.use(signInRouter)
-app.use(signOutRouter)
-app.use(signupRouter)
+import mongoose from "mongoose";
 
-app.all("*", async()=>{
-    throw new notFoundError()
-})
-app.use(errorHandler)
+import { app } from "./app";
 
-const startDB = async()=>{
-    try {
-        await mongoose.connect('mongodb://auth-mongo-srv:27017/auth')
-        console.log("Connecting to Mongo...")
-    } catch (error) {
-        console.error(error)
-    }
-}
-app.listen(3003,()=>{
-    console.log('Listening to port 3003!!!')
-})
+const startDB = async () => {
+  if (!process.env.JWT_KEY) throw new Error("JWT_KEY must required");
+  try {
+    await mongoose.connect("mongodb://auth-mongo-srv:27017/auth");
+    console.log("Connecting to Mongo...");
+  } catch (error) {
+    console.error(error);
+  }
+};
+app.listen(3003, () => {
+  console.log("Listening to port 3003!!!");
+});
 
-startDB()
+startDB();

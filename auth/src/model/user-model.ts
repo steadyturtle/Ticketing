@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { Password } from "../services/password";
 
+
 //an interface that describes the  properties
 //that are used to create a new user
 interface userAttr{
@@ -31,6 +32,15 @@ const userSchema = new mongoose.Schema({
     }
 
 
+},{
+    toJSON:{
+        transform(doc,ret){
+            ret.id = ret._id
+            delete ret._id
+            delete ret.password
+            delete ret.__v
+        }
+    }
 })
 userSchema.pre('save', async function(done){
     if(this.isModified('password')){
@@ -40,9 +50,9 @@ userSchema.pre('save', async function(done){
     }
     done()
 })
-userSchema.statics.build = (attr)=>{
+userSchema.statics.build = (attr: userDoc)=>{
     return new User(attr)
 }
-const User = mongoose.model<userDoc,userModel>("user",userSchema)
+const User = mongoose.model<userDoc,userModel>("User",userSchema)
 //User.build({email:'',password:''})
 export {User};

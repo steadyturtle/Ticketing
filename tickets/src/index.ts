@@ -7,14 +7,13 @@ const startDB = async () => {
   if (!process.env.MONGO_URI) throw new Error("MONGO_URI must required");
   try {
     await mongoose.connect(process.env.MONGO_URI);
-
     console.log("Connecting to Mongo...");
   } catch (error) {
     console.error(error);
   }
 };
-app.listen(3003, () => {
-  console.log("Listening to port 3003!!!");
+app.listen(3004, () => {
+  console.log("Listening to port 3004!!!");
 });
 
 startDB();

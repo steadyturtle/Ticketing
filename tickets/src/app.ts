@@ -2,12 +2,9 @@ import express from "express";
 import "express-async-errors";
 
 //import {json} from 'body-parser'
-import { currentUserRouter } from "./router/current-user";
-import { signInRouter } from "./router/signin";
-import { signOutRouter } from "./router/signout";
-import { signupRouter } from "./router/signup";
+import { createTicketsRouter } from "./routes/new";
 import { errorHandler, notFoundError } from "@steadyturtletickets/common";
-
+import { currentUser } from "@steadyturtletickets/common";
 import cookieSession from "cookie-session";
 const app = express();
 app.set("trust proxy", true);
@@ -19,10 +16,11 @@ app.use(
     secure: process.env.NODE_ENV !== "test",
   })
 );
-app.use(currentUserRouter);
-app.use(signInRouter);
-app.use(signOutRouter);
-app.use(signupRouter);
+app.use(currentUser);
+app.use(createTicketsRouter);
+// app.use(signInRouter);
+// app.use(signOutRouter);
+// app.use(signupRouter);
 
 app.all("*", async () => {
   throw new notFoundError();

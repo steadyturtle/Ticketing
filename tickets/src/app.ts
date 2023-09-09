@@ -3,6 +3,10 @@ import "express-async-errors";
 
 //import {json} from 'body-parser'
 import { createTicketsRouter } from "./routes/new";
+import { showTicketsRouter } from "./routes/show";
+import { getTicketsRouter } from "./routes/index";
+import { updateTicketsRouter } from "./routes/update";
+
 import { errorHandler, notFoundError } from "@steadyturtletickets/common";
 import { currentUser } from "@steadyturtletickets/common";
 import cookieSession from "cookie-session";
@@ -18,9 +22,9 @@ app.use(
 );
 app.use(currentUser);
 app.use(createTicketsRouter);
-// app.use(signInRouter);
-// app.use(signOutRouter);
-// app.use(signupRouter);
+app.use(showTicketsRouter);
+app.use(getTicketsRouter);
+app.use(updateTicketsRouter);
 
 app.all("*", async () => {
   throw new notFoundError();

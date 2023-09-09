@@ -17,6 +17,20 @@ spec:
                 name: auth-clusterip-srv
                 port:
                   number: 3003
+          - path: /api/tickets/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: tickets-clusterip-srv
+                port:
+                  number: 3004                 
+          - path: /api/orders/?(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: orders-clusterip-srv
+                port:
+                  number: 3005  
           - path: /?(.*)
             pathType: Prefix
             backend:
